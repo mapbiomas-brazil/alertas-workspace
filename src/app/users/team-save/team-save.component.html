@@ -1,0 +1,60 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a routerLink="/" routerLinkActive="active">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a routerLink="/users/teams" routerLinkActive="active">Teams</a>
+  </li>
+  <li class="breadcrumb-item active">New</li>
+</ol>
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="card">
+      <div class="card-body">
+        <h3>
+          <span *ngIf="!team.id">New </span>
+          <span *ngIf="team.id">Update </span>
+          Team
+        </h3>
+        <hr />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <form #teamForm="ngForm" (ngSubmit)="teamFormSubmit()" ngNativeValidate>
+              <div class="form-group">
+                <label for="teamName">Name:</label>
+                <input [(ngModel)]="team.name" name="teamName" id="teamName" required class="form-control" type="text"
+                placeholder="Enter team name">
+              </div>
+              <div class="form-group">
+                <label for="teamTerritorySelected">Team Territory:</label>
+                <ng-select [items]="territories" [clearable]="false" [(ngModel)]="team.territory"
+                  (change)="territoriesSelectedChange($event)" name="teamTerritorySelected" aria-placeholder="Select a territory"
+                  typeToSearchText="Search a territory" bindLabel="name" required>
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    {{item.name}} ({{item.categoryName}})
+                  </ng-template>
+                </ng-select>
+                <div *ngIf="teamFormValidation.territories === false" class="text-warning mt-1">Select territory for all
+                  teams.</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <hr />
+                  <button [disabled]="teamForm.invalid || !teamFormValidation.general" class="btn btn-success"
+                    type="submit"><i class="fa fa-save"></i>
+                    Save Team</button>
+                </div>
+              </div>
+            </form>
+            <br />
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6" style="height: 600px;">
+            <div class="h-100">
+              <app-team-save-map #teamTerritoriesMap></app-team-save-map>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+
+<div class="container-fluid animated fadeIn" data-simplebar>
+  <div class="row">
+    <div class="col-sm-12">
+      <form #dashboardFilterForm="ngForm">
+        <div class="form-row">
+          <div *ngIf="false" class="form-group col-md-2">
+            <ng-select [items]="teams" [clearable]="false" bindLabel="name" [(ngModel)]="formFilterData.team"
+              name="dashboardFilterTeam" id="dashboardFilterTeam" (change)="onFormFilterChange($event)"
+              placeholder="Select a Team">
+              <ng-template ng-label-tmp let-item="item">
+                <b>Team:</b> {{item.name}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="form-group col-md-2">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <button daterange class="btn btn-secondary" type="button"
+                  (dateRangeChange)="formFilterData.dates = $event;onFormFilterChange($event)">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </div>
+              <ng-container *ngIf="!formFilterData.dates">
+                <input type="text" disabled class="form-control bg-white" name="dashboardFilterDate"
+                  id="dashboardFilterDate" aria-describedby="dashboardFilterDate" placeholder="Detected date interval">
+              </ng-container>
+              <ng-container *ngIf="formFilterData.dates">
+                <input type="text" disabled class="form-control bg-white" name="dashboardFilterDate"
+                  id="dashboardFilterDate" aria-describedby="dashboardFilterDate"
+                  placeholder="{{formFilterData.dates[0] | date:'dd/MM/yyyy'}} - {{formFilterData.dates[1] | date:'dd/MM/yyyy'}}">
+              </ng-container>
+            </div>
+          </div>
+          <div class="form-group col-md-2">
+            <app-select-territories [territories]="formFilterData.territories" (change)="formFilterData.territories = $event;onFormFilterChange($event)">
+            </app-select-territories>
+          </div>
+          <div class="form-group col-md-2">
+            <ng-select [items]="sources" [clearable]="false" bindLabel="name" [multiple]="true"
+              [(ngModel)]="formFilterData.sources" name="dashboardFilterSource" id="dashboardFilterSource"
+              (change)="onFormFilterChange($event)" placeholder="Select alert sources">
+            </ng-select>
+          </div>
+          <div class="form-group col-md-1">
+            <button (click)="clearFilter()" class="btn btn-dark" type="button">Clear</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
+      <div class="card">
+        <div class="card-header">Alert Status by Biome</div>
+        <div class="card-body" style="height: 500px;" data-simplebar>
+          <app-chart1 [parameters]="chartParameters"></app-chart1>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+      <div class="card">
+        <div class="card-header">Alert Status</div>
+        <div class="card-body" style="height: 500px;">
+          <app-chart2 [parameters]="chartParameters"></app-chart2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">Alert Status by Day</div>
+        <div class="card-body">
+          <div style="height:400px">
+            <app-chart3 [parameters]="chartParameters"></app-chart3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

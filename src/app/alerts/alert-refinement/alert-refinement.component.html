@@ -1,0 +1,255 @@
+<div id="alert-refinement" class="_animated _fadeIn" style="height: 100%">
+  <div class="row" style="height: 100%">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-8 pr-0" style="height: 100%">
+      <div class="d-flex flex-column h-100">
+        <div class="flex-fill">
+          <app-alert-refinement-map #alertMap></app-alert-refinement-map>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 h-100" data-simplebar style="background-color: white">
+      <div class="h-100 pr-3">
+        <ng-container *ngIf="alert">
+          <br />
+          <button (click)="refineAlertNext()" [disabled]="!alertNext"
+            class="btn btn-sm btn-outline-secondary float-right ml-1">
+            Next
+            <i class="fa fa-angle-right"></i>
+          </button>
+          <button [routerLink]="['/alerts']" class="btn btn-sm btn-outline-secondary float-right">
+            <i class="fa fa-angle-left"></i> Back
+          </button>
+          <h3 class="header"> Alert Refinement</h3>
+          <hr />
+          <table class="w-100 mb-2">
+            <tr>
+              <td class="font-weight-bold" style="width: 25%;">ID:</td>
+              <td class="text-capitalize text-left" style="width: 30%;">{{alert.id}}</td>
+
+              <td class="font-weight-bold">Biome:</td>
+              <td class="text-capitalize text-left">
+                {{alert.territory?.biomeName.toLowerCase()}}
+              </td>
+              <td class="font-weight-bold"></td>
+              <td class="text-capitalize text-left"></td>
+            </tr>
+            <tr>
+              <td class="font-weight-bold">Detection:</td>
+              <td class="text-capitalize text-left">
+                {{alert.detectedAt | date:'yyyy-MM-dd'}}</td>
+
+              <td class="font-weight-bold">State:</td>
+              <td class="text-capitalize text-left">
+                {{alert.territory?.stateName.toLowerCase()}}
+              </td>
+
+              <td class="font-weight-bold"></td>
+              <td class="text-capitalize text-left"></td>
+            </tr>
+            <tr>
+              <td class="font-weight-bold">Sources:</td>
+              <td class="text-capitalize text-left small">{{alert.sources}}</td>
+
+              <td class="font-weight-bold">City:</td>
+              <td class="text-capitalize text-left">
+                {{alert.territory?.cityName.toLowerCase()}}
+              </td>
+              <td class="font-weight-bold"></td>
+              <td class="text-capitalize text-left"></td>
+            </tr>
+            <tr>
+              <td><b>Status:</b></td>
+              <td style="text-transform: capitalize;">
+                <ng-container *ngFor="let status of alertStatusList">
+                  <span class="badge" [style.backgroundColor]="status.color"
+                    *ngIf="alert.status.status == status.status">{{status.label}}</span>
+                </ng-container>
+              </td>
+
+              <td class="font-weight-bold"></td>
+              <td class="text-capitalize text-left"></td>
+
+              <td class="font-weight-bold"></td>
+              <td class="text-capitalize text-left"></td>
+            </tr>
+          </table>
+          <br />
+
+          <table *ngIf="alert.activation && alert.activation.images" class="table table-borderless w-100" style="border:1px solid #ccc">
+            <tbody>
+              <tr class="bg-light">
+                <td class="text-center font-weight-bold p-1 w-50">Before Image</td>
+                <td class="text-center font-weight-bold p-1 w-50">After Image</td>
+              </tr>
+              <tr *ngIf="alertRefinementData.imageBeforeThumbnail && alertRefinementData.imageAfterThumbnail">
+                <td class="p-0 w-50">
+                  <img class="w-100" style="border-right: 1px solid white;"
+                    [src]="alertRefinementData.imageBeforeThumbnail.base64" />
+                </td>
+                <td class="p-0 w-50">
+                  <img class="w-100" style="border-left: 1px solid white;"
+                    [src]="alertRefinementData.imageAfterThumbnail.base64" />
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center">
+                  <ng-container *ngFor="let image of alert?.activation.images">
+                    <ng-container *ngIf="image.reference == 'before'">
+                      <div>
+                        <i *ngIf="image.gcsExists === null" class="fa fa-square-o text-default fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GCS not checked"></i>
+                        <i *ngIf="image.gcsExists === true" class="fa fa-check-square text-success fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GCS exists"></i>
+                        <i *ngIf="image.gcsExists === false" class="fa fa-warning text-danger fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GCS not exists"></i>
+                        <i *ngIf="image.geeExists === null" class="fa fa-square-o text-default fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GEE not checked"></i>
+                        <i *ngIf="image.geeExists === true" class="fa fa-check-square text-success fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GEE exists"></i>
+                        <i *ngIf="image.geeExists === false" class="fa fa-warning text-danger fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GEE not exists"></i>
+                        {{image.acquiredAt | date:'yyyy-MM-dd HH:mm:ss'}}
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <td class="text-center">
+                  <ng-container *ngFor="let image of alert?.activation.images">
+                    <ng-container *ngIf="image.reference == 'after'">
+                      <div>
+                        <i *ngIf="image.gcsExists === null" class="fa fa-square-o text-default fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GCS not checked"></i>
+                        <i *ngIf="image.gcsExists === true" class="fa fa-check-square text-success fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GCS exists"></i>
+                        <i *ngIf="image.gcsExists === false" class="fa fa-warning text-danger fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GCS not exists"></i>
+                        <i *ngIf="image.geeExists === null" class="fa fa-square-o text-default fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GEE not checked"></i>
+                        <i *ngIf="image.geeExists === true" class="fa fa-check-square text-success fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GEE exists"></i>
+                        <i *ngIf="image.geeExists === false" class="fa fa-warning text-danger fa-lg mr-1"
+                          data-toggle="tooltip" data-placement="top" title="GEE not exists"></i>
+                        {{image.acquiredAt | date:'yyyy-MM-dd HH:mm:ss'}}
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div  *ngIf="alert.activation && alert.activation.images" class="row mb-3">
+            <div class="col-md-12">
+              <ul class="nav nav-tabs mb-1" id="refinementType" role="tablist">
+                <li class="nav-item w-50">
+                  <a class="nav-link text-center active" id="automatic-tab" data-toggle="tab" href="#automatic"
+                    role="tab" aria-controls="automatic" aria-selected="true">Automatic</a>
+                </li>
+                <li class="nav-item w-50">
+                  <a class="nav-link text-center" id="manual-tab" data-toggle="tab" href="#manual" role="tab"
+                    aria-controls="manual" aria-selected="false">Manual</a>
+                </li>
+              </ul>
+              <div class="tab-content mt-3" id="refinementTypeContent" style="border:0">
+                <div class="tab-pane fade show active p-0" id="automatic" role="tabpanel"
+                  aria-labelledby="automatic-tab">
+                  <div class="btn-group w-100" role="group" aria-label="Basic example">
+                    <button (click)="drawBounderyPolygons()" class="btn btn-secondary btn-draw"
+                      [ngClass]="{active: (alertMap.sampleFocus == 'boundery')}">
+                      <i *ngIf="alertRefinementData.boundery?.features.length > 0" class="fa fa-check fa-lg"></i>
+                      <span style="color: black;"> <b>Set Alert Envelope</b></span>
+                    </button>
+                    <button (click)="drawNotDeforestationPolygons()" class="btn btn-success btn-draw"
+                      [ngClass]="{active: (alertMap.sampleFocus == 'notDeforestation')}">
+                      <i *ngIf="alertRefinementData.notDeforestation?.features.length > 0"
+                        class="fa fa-check fa-lg"></i>
+                      <b>Set Non Deforestation</b>
+                    </button>
+                    <button (click)="drawDeforestationPolygons()" class="btn btn-warning btn-draw"
+                      [ngClass]="{active: (alertMap.sampleFocus == 'deforestation')}">
+                      <i *ngIf="alertRefinementData.deforestation?.features.length > 0" class="fa fa-check fa-lg"></i>
+                      <b>Set Deforestation</b>
+                    </button>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="row mt-3">
+                        <div class="col-md-12">
+                          <button class="btn btn-block btn-info mr-2" (click)="classify()"
+                            [disabled]="isProcessing">Classify</button>
+                        </div>
+                      </div>
+                      <div class="form-group mt-3" *ngIf="alertRefinementData.alertRefined">
+                        <label for="formControlRange">Cleaning: {{(alertRefinementData.cleaning)}}</label>
+                        <input type="range" min="0" max="0.5" step="0.0001"
+                          [(ngModel)]="alertRefinementData.cleaning" [disabled]="isProcessing"
+                          name="alertRefinementDataCleaning" class="form-control-range" id="formControlRange"
+                          (change)="alertRefinementCleaningChange($event.target.value)">
+                      </div>
+                      <div class="form-group mt-3" *ngIf="alertRefinementData.alertRefined">
+                        <label for="formControlRange">Simplification: {{(alertRefinementData.simplification)}}</label>
+                        <input type="range" min="0" max="0.0005" step="0.000001"
+                          [(ngModel)]="alertRefinementData.simplification" [disabled]="isProcessing"
+                          name="alertRefinementDataSimplication" class="form-control-range" id="formControlRange"
+                          (change)="alertRefinementSimplicationChange($event.target.value)">
+                      </div>                     
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade p-0" id="manual" role="tabpanel" aria-labelledby="manual-tab">
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <button (click)="drawAlertRefined()" class="btn btn-block btn-info btn-draw"
+                        [ngClass]="{active: (alertMap.sampleFocus == 'alertRefined')}">
+                        <i *ngIf="alertRefinementData.alertRefined?.features.length > 0" class="fa fa-check fa-lg"></i>
+                        <b>Draw Alert Refinement</b>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+
+          <ng-container *ngIf="!alertNextShow">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="btn-group dropup float-right">
+                  <button class="btn btn-danger dropdown-toggle" [disabled]="isProcessing" type="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-close"></i>
+                    Reject Alert
+                  </button>
+                  <div class="dropdown-menu">
+                    <h5 class="muted p-2 pb-1">Rejection reasons:</h5>
+                    <div class="dropdown-divider"></div>
+                    <ng-container *ngFor="let item of alertRejectionReasons">
+                      <a *ngIf="item.id <= 16" class="dropdown-item" (click)="rejectAlertRefinement(item.id)" href="javascript:;">
+                        <i class="fa fa-dot-circle-o"></i> {{item.label}}
+                      </a>
+                    </ng-container>
+                  </div>
+                </div>
+                <button (click)="saveAlertRefinement()" [disabled]="!validateAlertRefinementData() || isProcessing"
+                  class="btn btn-success float-right mr-1">
+                  <i class="fa fa-check"></i>
+                  Aprove Refinement
+                </button>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="alertNextShow">
+            <div class="row">
+              <div class="col-md-12">
+                <button (click)="refineAlertNext()" class="btn btn-dark btn-block">
+                  Refine Next &nbsp;
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

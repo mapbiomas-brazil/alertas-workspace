@@ -1,0 +1,104 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a routerLink="/" routerLinkActive="active">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a routerLink="/users" routerLinkActive="active">Users</a>
+  </li>
+  <li class="breadcrumb-item active">New</li>
+</ol>
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="card">
+      <div class="card-body">
+        <h3>
+          <span *ngIf="!user.id">New </span>
+          <span *ngIf="user.id">Update </span>
+          User
+        </h3>
+        <hr />
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <form #userForm="ngForm" (ngSubmit)="userFormSubmit()" ngNativeValidate>
+              <div class="form-group">
+                <label for="userName">Name:</label>
+                <input [(ngModel)]="user.name" name="userName" id="userName" required class="form-control" type="text"
+                  placeholder="Enter user name">
+              </div>
+              <div class="form-group">
+                <label for="userEmail">Email</label>
+                <input [(ngModel)]="user.email" name="userEmail" id="userEmail" required class="form-control"
+                  type="email" placeholder="Enter user email">
+                <div *ngIf="userFormValidation.email === false" class="text-warning mt-1">Email is already used.</div>
+              </div>
+              <div class="form-group">
+                <label for="userInstitution">Institution</label>
+                <input [(ngModel)]="user.institution" name="userInstitution" id="userInstitution" class="form-control"
+                  type="text" placeholder="Enter user institution" required>
+              </div>
+              <div class="form-group">
+                <label for="userGroup">Access Level</label>
+                <ng-select [items]="groups" bindLabel="name" [(ngModel)]="user.group" name="userGroup" required
+                  id="userGroup" placeholder="Select a user group">
+                </ng-select>
+              </div>
+              <div class="form-group">
+                <label for="userTeam">Team</label>
+                <ng-select [items]="teams" [multiple]="true" bindLabel="name" [(ngModel)]="teamsSelected"
+                  (change)="userTeamChange($event)" name="userTeam" required id="userTeam" placeholder="Select a team">
+                </ng-select>
+              </div>
+              <ng-container *ngIf="teamsSelected?.length">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h4>Territories <span class="small text-muted">Set territories for each team</span></h4>
+                    <hr />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <ng-select [items]="teamsSelected" bindLabel="name" [(ngModel)]="territoryTeamSelected"
+                        name="territoryTeamSelected" id="territoryTeamSelected" [clearable]="false"
+                        (change)="territoryTeamSelectedChange($event)">
+                        <ng-template ng-label-tmp let-item="item">
+                          <b>Team:</b> {{item.name}}
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <ng-select [items]="territories$ | async" [multiple]="true" [hideSelected]="true" [minTermLength]="2"
+                    [loading]="territoriesLoading" [typeahead]="territoryInput$"
+                    [(ngModel)]="userTeamTerritoriesSelected" (change)="territoriesSelectedChange($event)"
+                    name="userTeamTerritoriesSelected" typeToSearchText="Search a territory" bindLabel="name" required>
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                      {{item.name}} ({{item.categoryName}})
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="userFormValidation.territories === false" class="text-warning mt-1">Select territory for
+                    all teams.</div>
+                </div>
+              </ng-container>
+              <div class="row">
+                <div class="col-sm-12">
+                  <hr />
+                  <button [disabled]="userForm.invalid || !userFormValidation.general" class="btn btn-success"
+                    type="submit"><i class="fa fa-save"></i>
+                    Save User</button>
+                </div>
+              </div>
+            </form>
+            <br />
+          </div>
+          <!-- <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6" style="height: 600px;">
+            <div class="h-100">
+              <app-user-save-map #userTerritoriesMap></app-user-save-map>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a routerLink="/" routerLinkActive="active">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active">Users</li>
+</ol>
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <button [routerLink]="['/users/new']" class="btn btn-success float-right">
+              <i class="fa fa-plus"></i> New User
+            </button>
+            <h4 class="card-title mb-0">Users</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <form>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <ng-select [items]="teams" bindLabel="name" [(ngModel)]="userFilterData.team" name="userTeam" required
+                    id="userTeam" placeholder="Select a team" (change)="list()">
+                  </ng-select>
+                </div>
+                <div class="form-group col-md-4">
+                  <ng-select [items]="groups" bindLabel="name" [(ngModel)]="userFilterData.group" name="userGroup"
+                    required id="userGroup" placeholder="Select a user group" (change)="list()">
+                  </ng-select>
+                </div>
+              </div>
+            </form>
+          </div>         
+        </div>       
+        <table class="table table-responsive-sm table-hover table-outline mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th class="text-center">
+                <i class="icon-people"></i>
+              </th>
+              <th>User</th>
+              <th>Email</th>
+              <th width="15%">Team</th>
+              <th>Access Level</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td class="text-center">
+                <div class="avatar">
+                  <img class="img-avatar" [src]="user.photo || '/assets/img/user-avatar.png'" [alt]="user.name">
+                </div>
+              </td>
+              <td>
+                <div>{{user.name}}</div>
+                <div class="small text-muted">
+                  <span>Registered: {{user.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+                </div>
+              </td>
+              <td>
+                {{user.email}}
+              </td>
+              <td>
+                <ng-container *ngFor="let team of user.teams">
+                  <span class="badge badge-md badge-dark mr-1"
+                    style="font-size: small;font-weight: normal;">{{team?.name}}</span>
+                </ng-container>
+              </td>
+              <td>
+                {{user.group?.name}}
+              </td>
+              <td>
+                <button class="btn btn-sm btn-warning float-right" (click)="remove(user)">
+                  <i class="fa fa-trash"></i>
+                </button>
+                <button [routerLink]="['/users/edit',user.id]" class="btn btn-sm btn-info float-right mr-1">
+                  <i class="fa fa-edit"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br />
+        <pagination-links [pagination]="pagination" (paginate)="list($event)"></pagination-links>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div appSidebar class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:;">
+          MapBiomas Alerts
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+          <i class="nav-icon icon-speedometer"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-title">Modules</li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/alerts" routerLinkActive="active">
+          <i class="fa fa-map-marker mr-1"></i><span translate="">Alerts</span>
+        </a>
+      </li>
+      <li class="nav-item"
+        *ngIf="authUser.roles.indexOf(userRoles.Admin) >= 0 || authUser.roles.indexOf(userRoles.AnalystCoordinator) >= 0">
+        <a class="nav-link" routerLink="/alerts/auditing">
+          <i class="fa fa-check-square-o mr-1"></i>Auditing
+        </a>
+      </li>
+      <li class="nav-item"
+        *ngIf="authUser.roles.indexOf(userRoles.Admin) >= 0 || authUser.roles.indexOf(userRoles.AnalystCoordinator) >= 0">
+        <a class="nav-link" routerLink="/users">
+          <i class="fa fa-user mr-1"></i>Users
+        </a>
+      </li>
+      <li class="nav-item"
+        *ngIf="authUser.roles.indexOf(userRoles.Admin) >= 0 || authUser.roles.indexOf(userRoles.AnalystCoordinator) >= 0">
+        <a class="nav-link" routerLink="/users/teams">
+          <i class="fa fa-users mr-1"></i>Teams
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

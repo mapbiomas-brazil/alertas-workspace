@@ -1,0 +1,203 @@
+<div class="_animated _fadeIn" style="height: 100%">
+  <div class="row" style="height: 100%">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-8 pr-0" style="height: 100%">
+      <div class="d-flex flex-column h-100">
+        <div class="bg-white pt-3 pl-3 pr-3">
+          <div class="row">
+            <div class="col-sm-12">
+              <form #alertFilterForm="ngForm">
+                <div class="form-row">
+                  <div class="form-group col-md-2">
+                    <ng-select [items]="userTeams" [clearable]="false" bindLabel="name" [(ngModel)]="alertsFilter.team"
+                      name="alertFilterTeam" id="alertFilterTeam" (change)="onAlertFilterTeamChange($event)"
+                      placeholder="Select a Team">
+                      <ng-template ng-label-tmp let-item="item">
+                        <b>Team:</b> {{item.name}}
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <button daterange class="btn btn-outline-secondary" type="button"
+                          (dateRangeChange)="onAlertFilterDateChange($event)">
+                          <i class="fa fa-calendar"></i>
+                        </button>
+                      </div>
+                      <input type="text" disabled class="form-control bg-white" name="alertFilterDate"
+                        id="alertFilterDate" aria-describedby="alertFilterDate" placeholder="Date interval">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <ng-select [items]="territories$ | async" [multiple]="false" [hideSelected]="true"
+                      [minTermLength]="2" [loading]="territoriesLoading" [typeahead]="territoryInput$"
+                      [(ngModel)]="alertsFilter.territory" (change)="onAlertFilterTerritoryChange($event)"
+                      name="userTeamTerritorySelected" typeToSearchText="Search a territory" bindLabel="name"
+                      placeholder="Type a territory name" required>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        {{item.name}} ({{item.categoryName}})
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <ng-select [items]="alertStatusList" bindLabel="label" [(ngModel)]="alertsFilter.status"
+                      name="alertFilterStatus" id="alertFilterStatus" (change)="onAlertFilterStatusChange($event)"
+                      placeholder="Alert status">
+                    </ng-select>
+                  </div>
+                  <ng-container *ngIf="alertsFilter.status?.status == alertStatusValue.PREAPPROVED">
+                    <div class="form-group col-md-2">
+                      <ng-select
+                        [items]="[{label:'GEE Valid',value:true},{label:'GEE Invalid',value:false},{label:'All pre-approved',value:null}]"
+                        bindLabel="label" bindValue="value" [markFirst]="true"
+                        [(ngModel)]="alertsFilter.geeImagesValidation" name="alertFiltergeeImagesValidation"
+                        id="alertFiltergeeImagesValidation" (change)="onAlertFilterChange()"
+                        placeholder="GEE verification">
+                      </ng-select>
+                    </div>
+                  </ng-container>
+                  <div class="form-group col-md-1">
+                    <input type="text" class="form-control" [(ngModel)]="alertsFilter.id"
+                      (ngModelChange)="this.alertsFilterIdSubject.next($event)" name="alertFilterId" id="alertFilterId"
+                      aria-describedby="alertFilterId" placeholder="Alert ID">
+                  </div>
+                  <div class="form-group col-md-1">
+                    <button (click)="alertFilterClear()" class="btn btn-ghost-dark" type="button">Clear</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="flex-fill" style="border-top: 1px solid #ccc;border-right: 1px solid #ccc;">
+          <app-alert-list-map #alertsMap></app-alert-list-map>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 h-100 bg-white">
+      <div style="height: 100%;overflow-y: scroll;">
+        <br />
+        <h3 class="header">
+          <ng-container *ngFor="let status of alertStatusList">
+            <span [style.color]="status.color" *ngIf="alertsFilter.status?.status == status.status">{{status.label}}
+            </span>
+          </ng-container>
+          Alerts
+        </h3>
+        <hr />
+        <div *ngIf="alerts?.length > 0" class="row no-gutters">
+          <div class="col-md-9">
+            <span style="vertical-align: middle;">
+              <b>Total:</b> {{pagination.total}} alerts found.
+            </span>
+          </div>
+          <div class="col-md-3">
+            <ng-select [items]="pages" [clearable]="false" name="alertsPage" id="alertsPage" [(ngModel)]="page"
+              (change)="pageChange($event)">
+              <ng-template ng-label-tmp let-item="item">
+                <b>Page:</b> {{item}}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+        <br />
+        <ng-container *ngFor="let alert of alerts">
+          <div class="mb-3">
+            <div class="row no-gutters alert-card">
+              <div class="col-md-4">
+                <ng-container *ngIf="usersRefining[alert.id]">
+                  <img class="user-marker" [src]="usersRefining[alert.id]?.photo" />
+                </ng-container>
+                <app-alert-item-preview [alert]="alert"></app-alert-item-preview>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body pt-1 pb-1">
+                  <h5 class="card-title">
+                    <ng-container *ngFor="let status of alertStatusList">
+                      <span class="badge" [style.backgroundColor]="status.color"
+                        *ngIf="alert.status.status == status.status">{{status.label}}</span>
+                    </ng-container>
+                  </h5>
+                  <table class="w-100 mb-2">
+                    <tr>
+                      <td class="font-weight-bold" style="width: 25%;">ID:</td>
+                      <td class="text-capitalize text-left" style="width: 30%;">{{alert.id}}</td>
+
+                      <td class="font-weight-bold">Biome:</td>
+                      <td class="text-capitalize text-left">
+                        {{alert.territory?.biomeName.toLowerCase()}}
+                      </td>
+                      <td class="font-weight-bold"></td>
+                      <td class="text-capitalize text-left"></td>
+                    </tr>
+                    <tr>
+                      <td class="font-weight-bold">Detection:</td>
+                      <td class="text-capitalize text-left">
+                        {{alert.detectedAt | date:'yyyy-MM-dd'}}</td>
+
+                      <td class="font-weight-bold">State:</td>
+                      <td class="text-capitalize text-left">
+                        {{alert.territory?.stateName.toLowerCase()}}
+                      </td>
+
+                      <td class="font-weight-bold"></td>
+                      <td class="text-capitalize text-left"></td>
+                    </tr>
+                    <tr>
+                      <td class="font-weight-bold">Sources:</td>
+                      <td class="text-capitalize text-left small">{{alert.sources}}</td>
+
+                      <td class="font-weight-bold">City:</td>
+                      <td class="text-capitalize text-left">
+                        {{alert.territory?.cityName.toLowerCase()}}
+                      </td>
+                      <td class="font-weight-bold"></td>
+                      <td class="text-capitalize text-left"></td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td style="text-transform: capitalize;"></td>
+
+                      <td class="font-weight-bold"></td>
+                      <td class="text-capitalize text-left"></td>
+
+                      <td class="font-weight-bold"></td>
+                      <td class="text-capitalize text-left"></td>
+                    </tr>
+                  </table>
+                  <button (click)="zoomToAlert(alert)" class="btn btn-secondary btn-sm">
+                    <i class="fa fa-search"></i>
+                    Zoom
+                  </button>
+                  &nbsp;
+                  <ng-container *ngIf="!usersRefining[alert.id]">
+                    <a [routerLink]="['/alerts/refinement',alert.id]"
+                      [ngClass]="{disabled: ([alertStatusValue.PREAPPROVED,alertStatusValue.REVISION].indexOf(alert.status.status) < 0)}"
+                      class="btn btn-info btn-sm">
+                      <i class="fa fa-pencil-square-o"></i>
+                      Refine
+                    </a>
+                  </ng-container>
+                  <ng-container *ngIf="usersRefining[alert.id]">
+                    <a class="btn disabled btn-info btn-sm">
+                      <i class="fa fa-pencil-square-o"></i>
+                      Refining
+                    </a> by {{usersRefining[alert.id].name}}
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="alerts?.length > 0">
+          <pagination-links [pagination]="pagination" (paginate)="list($event)"></pagination-links>
+        </ng-container>
+        <ng-container *ngIf="alerts?.length == 0">
+          <div class="mr-3">
+            <div class="alert alert-secondary" role="alert">No alerts found.</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

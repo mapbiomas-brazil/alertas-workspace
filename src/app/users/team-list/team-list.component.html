@@ -1,0 +1,60 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a routerLink="/" routerLinkActive="active">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Teams</li>
+</ol>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button [routerLink]="['/users/teams/new']" class="btn btn-success float-right">
+                            <i class="fa fa-plus"></i> New Team
+                        </button>
+                        <h4 class="card-title mb-0">Teams</h4>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-responsive-sm table-hover table-outline mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Team</th>
+                                    <th>Territory Team</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let team of teams">
+                                    <td>
+                                        <div>{{team.name}}</div>
+                                        <div class="small text-muted">
+                                            <span>Registered: {{team.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                      {{team.territory?.name}}
+                                    </td>
+                                    <td>
+                                        <!-- <button class="btn btn-sm btn-warning float-right" (click)="remove(user)">
+                                            <i class="fa fa-trash"></i>
+                                        </button> -->
+                                        <button [routerLink]="['/users/teams/edit',team.id]"
+                                            class="btn btn-sm btn-info float-right mr-1">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <pagination-links [pagination]="pagination" (paginate)="list($event)"></pagination-links>
+            </div>
+        </div>
+    </div>
+</div>

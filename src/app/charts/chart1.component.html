@@ -1,0 +1,43 @@
+<table class="table table-responsive-sm mb-0" [ngClass]="{loadingdata: loading}">
+    <thead>
+        <tr>
+            <th style="border-top: 0px;" width="25%"></th>
+            <th *ngFor="let biome of biomes" style="border-top: 0px;">{{biome}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let status of alertStatus">
+            <tr (click)="showReasons($event)" [style.borderBottomColor]="statusByValue[status].color"
+                style="border-bottom: 2px solid;" [id]="statusByValue[status].status">
+                <td>
+                    {{statusByValue[status].label}}
+                    <span class="status opened badge-light" style="margin-left: 5px;display: none">-</span>
+                    <span class="status closed badge badge-secondary" style="margin-left: 5px;display: none">+</span>
+                </td>
+                <td *ngFor="let biome of biomes">
+                    <ng-container *ngIf="dataByBiomeStatus[biome+':'+status]">
+                        {{dataByBiomeStatus[biome+':'+status]}}
+                    </ng-container>
+                    <ng-container *ngIf="!dataByBiomeStatus[biome+':'+status]">
+                        0
+                    </ng-container>
+                </td>
+            </tr>
+            <ng-container *ngFor="let reason of alertStatusReasons">
+                <tr *ngIf="dataByStatusReason[(status+':'+reason)]"
+                    [style.borderBottomColor]="statusByValue[status].color"
+                    style="border-bottom: 1px solid;display: none;" [class]="statusByValue[status].status">
+                    <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{reasonsByValue[reason][0].label}} </td>
+                    <td *ngFor="let biome of biomes">
+                        <ng-container *ngIf="dataByBiomeStatusReason[biome+':'+status+':'+reason]">
+                            {{dataByBiomeStatusReason[biome+':'+status+':'+reason]}}
+                        </ng-container>
+                        <ng-container *ngIf="!dataByBiomeStatusReason[biome+':'+status+':'+reason]">
+                            0
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-container>
+        </ng-container>
+    </tbody>
+</table>

@@ -1,0 +1,18 @@
+<div class="dropdown">
+  <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="false">
+    {{laguages[laguageSelected]}}
+    <!-- <img src="/assets/img/flag-{{laguageSelected}}.png" alt="{{laguages[laguageSelected]}}" style="height:20px;"> -->
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="javascript:;" (click)="selectLanguage('en')">English
+      <!-- <img src="/assets/img/flag-en.png" alt="English" style="height:20px;"> -->
+    </a>
+    <a class="dropdown-item" href="javascript:;" (click)="selectLanguage('es')">Espanol
+      <!-- <img src="/assets/img/flag-es.png" alt="Espanol" style="height:20px;"> -->
+    </a>
+    <a class="dropdown-item" href="javascript:;" (click)="selectLanguage('pt-br')">Portugues
+      <!-- <img src="/assets/img/flag-pt-br.png" alt="Portuguese" style="height:20px;"> -->
+    </a>
+  </div>
+</div>

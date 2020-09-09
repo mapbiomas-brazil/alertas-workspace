@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Alerts Workspace</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://apis.google.com/js/platform.js" defer></script>
+  <meta name="google-signin-client_id" content="421846909566-bi64couv4ptindr13vt23a35q6nuv1ht.apps.googleusercontent.com">
+  <style>
+    .loading-container{width:256px;height:256px;position:absolute;top:50%;left:50%;opacity:1;transform:translate(-50%,-50%);-webkit-transition:opacity 1s;transition:opacity 1s}.loading{width:64px;height:64px;position:absolute;top:36%;left:36%;transform:rotate(45deg)}.loading div{width:32px;height:32px;position:absolute}.l1 div,.l2 div,.l3 div,.l4 div{width:100%;height:100%;background-color:#3498db}.l1{transform:translate(0,0)}.l2{transform:translate(0,32px)}.l3{transform:translate(32px,0)}.l4{transform:translate(32px,32px)}@keyframes rot1{0%{transform:rotate(0)}40%{transform:rotate(0)}50%{transform:rotate(0)}60%{transform:rotate(90deg)}100%{transform:rotate(90deg)}}@keyframes rot2{0%{transform:rotate(0)}40%{transform:rotate(0)}50%{transform:rotate(0)}60%{transform:rotate(-90deg)}100%{transform:rotate(-90deg)}}@keyframes rot3{0%{transform:rotate(45deg)}35%{transform:rotate(45deg)}65%{transform:rotate(405deg)}100%{transform:rotate(405deg)}}@keyframes l1-rise{0%{transform:translate(0,0)}30%{transform:translate(-8px,-8px)}70%{transform:translate(-8px,-8px)}100%{transform:translate(0,0)}}@keyframes l2-rise{0%{transform:translate(0,32px)}30%{transform:translate(-8px,40px)}70%{transform:translate(-8px,40px)}100%{transform:translate(0,32px)}}@keyframes l3-rise{0%{transform:translate(32px,0)}30%{transform:translate(40px,-8px)}70%{transform:translate(40px,-8px)}100%{transform:translate(32px,0)}}@keyframes l4-rise{0%{transform:translate(32px,32px)}30%{transform:translate(40px,40px)}70%{transform:translate(40px,40px)}100%{transform:translate(32px,32px)}}@keyframes color{0%{background-color:#3498db}50%{background-color:#2980b9}100%{background-color:#3498db}}.l1{animation:l1-rise 3s ease 0s infinite}.l2{animation:l2-rise 3s ease 0s infinite}.l3{animation:l3-rise 3s ease 0s infinite}.l4{animation:l4-rise 3s ease 0s infinite}.l1 div,.l4 div{animation:rot1 3s ease 0s infinite,color 3s linear 0s infinite}.l2 div,.l3 div{animation:rot2 3s ease 0s infinite,color 3s linear 0s infinite}
+  </style>
+</head>
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed">
+  <div id="apploading" class="loading-container">
+    <div class="loading">
+      <div class="l1">
+        <div></div>
+      </div>
+      <div class="l2">
+        <div></div>
+      </div>
+      <div class="l3">
+        <div></div>
+      </div>
+      <div class="l4">
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <app-root></app-root>
+</body>
+
+</html>

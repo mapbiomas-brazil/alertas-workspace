@@ -1,0 +1,103 @@
+//@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~@coreui/coreui/scss/coreui";
+@import "~@coreui/icons/css/coreui-icons.min.css";
+
+//@import "~flag-icon-css/css/flag-icon.min.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~animate.css/animate.css";
+@import "~daterangepicker/daterangepicker.css";
+@import "~eva-icons/style/eva-icons.css";
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~ionicons/dist/css/ionicons.css";
+@import "~leaflet-draw/dist/leaflet.draw.css";
+@import "~leaflet-groupedlayercontrol/dist/leaflet.groupedlayercontrol.min.css";
+@import "~leaflet/dist/leaflet.css";
+@import "~noty/src/noty.scss";
+@import "~noty/src/themes/metroui.scss";
+@import "~simple-line-icons/css/simple-line-icons.css";
+@import "~simplebar/dist/simplebar.min.css";
+
+html,
+body {
+  height: 100%;
+  color: #30302d;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.navbar-shadow {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+.app-header {  
+  background-color: #333333;
+  box-shadow: 1px 1px 3px #3a32324d;
+  border: 0px;
+} 
+
+.alert-card{
+  /* box-shadow: 2px 2px 5px #cccccc5e; */
+  border: 1px solid #dadada;
+  background-color: #f9f9f9;padding: 15px;
+}
+
+
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: #29d;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 2px;
+}
+
+#noty_layout__topLeft {
+  top: 120px !important;
+}
+
+app-alert-item-preview .leaflet-control-attribution {
+  display: none !important;
+}
+
+.user-marker {
+  margin: 5px;
+  width: 40px;
+  position: absolute;
+  border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+  z-index: 500;
+  box-shadow: 0 0 5px #2b2b2b;
+}
+
+.map-marker-user {
+  box-shadow: 0px 0px 5px #313131;
+  clip-path: polygon(5% 10%, 95% 10%, 95% 90%, 65% 90%, 50% 100%, 35% 90%, 5% 90%);
+  /* border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50% */
+}
+
+
+#alert-refinement .btn-draw.active{ 
+  border: 2px solid #333;
+}
